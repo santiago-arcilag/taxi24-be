@@ -27,15 +27,31 @@
 
 ## Project setup
 
+1. Clone the repository and install dependencies:
+
 ```bash
-$ npm install
+npm install
+```
+
+2. Copy the example environment file and configure your database credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` as needed for your local PostgreSQL setup.
+
+3. Run the database (PostgreSQL) locally. You can use Docker, for example:
+
+```bash
+docker run --name taxi24-postgres -e POSTGRES_USER=taxi24_user -e POSTGRES_PASSWORD=taxi24_pass -e POSTGRES_DB=taxi24_db -p 5432:5432 -d postgres
 ```
 
 ## Compile and run the project
 
 ```bash
 # development
-$ npm run start
+npm run start
 
 # watch mode
 $ npm run start:dev
