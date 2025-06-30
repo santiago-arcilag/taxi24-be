@@ -23,7 +23,35 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Taxi24_BE** is a backend RESTful API built for Taxi24, a startup aiming to revolutionize transportation by providing a white-label fleet management solution. This project is the result of a technical test to demonstrate backend design, domain modeling, and REST API development skills.
+
+### What is Taxi24_BE?
+Taxi24_BE exposes a set of APIs that allow other companies to manage their fleet of drivers and passengers, and to handle trip assignments efficiently. The project is built using Node.js with NestJS and TypeScript, and uses PostgreSQL as the database.
+
+### Main Features
+- **Drivers:**
+  - List all drivers
+  - List available drivers
+  - Find available drivers within a 3km radius of a location
+  - Get driver by ID
+- **Passengers:**
+  - List all passengers
+  - Get passenger by ID
+  - For a passenger, get the 3 closest available drivers
+- **Trips:**
+  - Create a new trip (assign driver to passenger)
+  - Complete a trip
+  - List all active trips
+  - List all trips
+
+### Technical Test Context
+- Built as a single NestJS service (Node.js, TypeScript)
+- Follows RESTful design and best practices
+- Demonstrates domain modeling, code quality, and use of known REST patterns
+- Includes seed data, SQL schema via TypeORM, and a clear README
+- Extra points for tests and Clean Architecture principles
+- No authentication/authorization required
+- API documentation available at `/api` via Swagger
 
 ## Project setup
 
