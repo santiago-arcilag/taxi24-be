@@ -15,4 +15,9 @@ export class PassengersController {
   findById(@Param('id') id: number): Promise<Passenger | null> {
     return this.passengersService.findById(Number(id));
   }
+
+  @Get(':id/closest-drivers')
+  findClosestDrivers(@Param('id') id: number) {
+    return this.passengersService.findClosestDrivers(Number(id));
+  }
 }

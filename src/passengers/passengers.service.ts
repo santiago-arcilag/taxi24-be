@@ -18,5 +18,23 @@ export class PassengersService {
     return this.passengerRepository.findOneBy({ id });
   }
 
-  // Additional methods for advanced queries can be added here
+  // Find the 3 closest available drivers to a passenger's location
+  async findClosestDrivers(passengerId: number): Promise<any[]> {
+    const passenger = await this.passengerRepository.findOneBy({ id: passengerId });
+    if (!passenger) return [];
+    return this.passengerRepository.query(
+      `SELECT *, (
+        6371 * acos(
+          cos(radians($1)) * cos(radians(latitude)) *
+          cos(radians(longitude) - radians($2)) +
+          sin(radians($1)) * sin(radians(latitude))
+        )
+      ) AS distance
+      FROM drivers
+      WHERE available = true
+      ORDER BY distance ASC
+      LIMIT 3`,
+      [passenger.latitude, passenger.longitude]
+    );
+  }
 }
