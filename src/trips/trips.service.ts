@@ -22,5 +22,23 @@ export class TripsService {
     return this.tripRepository.findOne({ where: { id }, relations: ['driver', 'passenger'] });
   }
 
-  // Additional methods for trip creation/completion can be added here
+  async createTrip(passengerId: number, driverId: number, start_latitude: number, start_longitude: number): Promise<Trip> {
+    const trip = this.tripRepository.create({
+      passenger: { id: passengerId },
+      driver: { id: driverId },
+      start_latitude,
+      start_longitude,
+      active: true,
+    });
+    return this.tripRepository.save(trip);
+  }
+
+  async completeTrip(tripId: number, end_latitude: number, end_longitude: number): Promise<Trip | null> {
+    const trip = await this.tripRepository.findOne({ where: { id: tripId }, relations: ['driver', 'passenger'] });
+    if (!trip) return null;
+    trip.end_latitude = end_latitude;
+    trip.end_longitude = end_longitude;
+    trip.active = false;
+    return this.tripRepository.save(trip);
+  }
 }
