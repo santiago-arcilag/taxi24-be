@@ -34,7 +34,13 @@ export class DriversService {
       ) AS distance
       FROM drivers
       WHERE available = true
-      HAVING distance <= $3
+      AND (
+        6371 * acos(
+          cos(radians($1)) * cos(radians(latitude)) *
+          cos(radians(longitude) - radians($2)) +
+          sin(radians($1)) * sin(radians(latitude))
+        )
+      ) <= $3
       ORDER BY distance ASC`,
       [lat, lng, radiusKm]
     );
