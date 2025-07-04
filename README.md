@@ -1,29 +1,56 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Taxi24_BE: Backend API for Taxi24 Technical Test
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Project Purpose
+This project implements a backend RESTful API for Taxi24, designed to serve as a white-label fleet management solution. It was developed as a technical test to demonstrate:
+- API design and RESTful best practices
+- Domain modeling for drivers, passengers, and trips
+- Use of Clean Architecture principles
+- Code quality, modularity, and maintainability
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Requirements Coverage
+**All requirements from the technical test are addressed:**
+- CRUD endpoints for drivers, passengers, and trips
+- Nearby driver search (within 3km)
+- Trip assignment and completion
+- 3 closest drivers for a passenger
+- Data model clarity and SQL schema (via TypeORM entities)
+- Seed data for demonstration
+- No authentication/authorization (as requested)
+- Frequent, descriptive git commits
+- API documentation via Swagger at `/api`
 
-## Description
+## Main Features
+- **Drivers:**
+  - List all drivers
+  - List available drivers
+  - Find available drivers within a 3km radius
+  - Get driver by ID
+- **Passengers:**
+  - List all passengers
+  - Get passenger by ID
+  - Get 3 closest available drivers for a passenger
+- **Trips:**
+  - Create a new trip (assign driver to passenger)
+  - Complete a trip
+  - List all active trips
+  - List all trips
 
-**Taxi24_BE** is a backend RESTful API built for Taxi24, a startup aiming to revolutionize transportation by providing a white-label fleet management solution. This project is the result of a technical test to demonstrate backend design, domain modeling, and REST API development skills.
+## Key Technical Decisions
+- **NestJS + TypeORM:** Chosen for modularity, scalability, and rapid development.
+- **PostgreSQL:** Used for relational modeling and geospatial queries.
+- **Clean Architecture:** Each domain (drivers, passengers, trips) is a separate module with its own entities, services, and controllers.
+- **Environment Configuration:** Supports both local (Docker/Postgres) and cloud (Railway, Render, etc.) deployments using `.env` variables and `DATABASE_URL`.
+- **Validation & Error Handling:** DTOs with `class-validator` and `ValidationPipe` ensure robust input validation; controllers return proper HTTP status codes and error messages.
+- **Seed Data:** A script (`src/seed.ts`) populates the DB with demo data for immediate testing.
+- **Swagger/OpenAPI:** Full API documentation is auto-generated and accessible at `/api`.
+
+## How Requirements Were Met
+- **No authentication/authorization:** All endpoints are public as requested.
+- **SQL schema:** The TypeORM entities (`driver.entity.ts`, `passenger.entity.ts`, `trip.entity.ts`) define the schema and auto-generate tables.
+- **Frequent commits:** Every meaningful change is committed with a descriptive message.
+- **Testing:** Includes unit tests and is ready for further test expansion.
+
+## Project setup
 
 ### What is Taxi24_BE?
 Taxi24_BE exposes a set of APIs that allow other companies to manage their fleet of drivers and passengers, and to handle trip assignments efficiently. The project is built using Node.js with NestJS and TypeScript, and uses PostgreSQL as the database.
