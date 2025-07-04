@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, BadRequestException, ParseFloatPipe } from '@nestjs/common';
 import { DriversService } from './drivers.service';
 import { Driver } from './driver.entity';
 
@@ -18,14 +18,21 @@ export class DriversController {
 
   @Get('available/nearby')
   findAvailableNearby(
-    @Query('lat') lat: string,
-    @Query('lng') lng: string,
+    @Query('lat', ParseFloatPipe) lat: number,
+    @Query('lng', ParseFloatPipe) lng: number,
     @Query('radiusKm') radiusKm?: string,
   ): Promise<Driver[]> {
-    const latitude = parseFloat(lat);
-    const longitude = parseFloat(lng);
-    const radius = radiusKm ? parseFloat(radiusKm) : 3;
-    return this.driversService.findAvailableWithinRadius(latitude, longitude, radius);
+    if (lat === undefined || lng === undefined || isNaN(lat) || isNaN(lng)) {
+      throw new BadRequestException('lat and lng query parameters are required and must be valid numbers.');
+    }
+    let radius = 3;
+    if (radiusKm !== undefined) {
+      const parsedRadius = parseFloat(radiusKm);
+      if (!isNaN(parsedRadius) && parsedRadius > 0) {
+        radius = parsedRadius;
+      }
+    }
+    return this.driversService.findAvailableWithinRadius(lat, lng, radius);
   }
 
   @Get(':id')
