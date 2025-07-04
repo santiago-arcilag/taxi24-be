@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Patch, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Patch, Body, Param, ValidationPipe, NotFoundException } from '@nestjs/common';
+import { CreateTripDto } from './dto/create-trip.dto';
 import { TripsService } from './trips.service';
 import { Trip } from './trip.entity';
 
@@ -7,8 +8,8 @@ export class TripsController {
   constructor(private readonly tripsService: TripsService) {}
 
   @Post()
-  async createTrip(@Body() body: { passengerId: number; driverId: number; start_latitude: number; start_longitude: number }) {
-    return this.tripsService.createTrip(body.passengerId, body.driverId, body.start_latitude, body.start_longitude);
+  async createTrip(@Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true })) dto: CreateTripDto) {
+    return this.tripsService.createTrip(dto.passengerId, dto.driverId, dto.start_latitude, dto.start_longitude);
   }
 
   @Patch(':id/complete')
@@ -30,7 +31,9 @@ export class TripsController {
   }
 
   @Get(':id')
-  findById(@Param('id') id: number): Promise<Trip | null> {
-    return this.tripsService.findById(Number(id));
+  async findById(@Param('id') id: number) {
+    const trip = await this.tripsService.findById(Number(id));
+    if (!trip) throw new NotFoundException('Trip not found');
+    return trip;
   }
 }
