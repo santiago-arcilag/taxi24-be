@@ -80,27 +80,46 @@ Taxi24_BE exposes a set of APIs that allow other companies to manage their fleet
 - No authentication/authorization required
 - API documentation available at `/api` via Swagger
 
-## Project setup
+## Deployment (Railway)
+
+This project is deployed using [Railway](https://railway.app/), a cloud platform for Node.js apps with integrated PostgreSQL support.
+
+### How Railway Deployment Works
+- The GitHub repository is connected directly to Railway.
+- A virtual machine running Node.js 20+ is selected for the service.
+- Environment variables (including `DATABASE_URL` for PostgreSQL) are configured in the Railway dashboard.
+- **Continuous Deployment:** Every commit to the `master` branch automatically triggers a new deployment version.
+- Railway builds and starts the app using your `package.json` scripts (`npm run build` and `npm run start:prod`).
+- The API and Swagger documentation are available at the public Railway URL (e.g., `https://your-app.up.railway.app/api`).
+
+**No manual deployment steps are needed after initial setup—just push to `master`!**
+
+---
+
+## Local development setup
+
+If you want to run the project locally for development:
 
 1. Clone the repository and install dependencies:
-
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
 2. Copy the example environment file and configure your database credentials:
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` as needed for your local PostgreSQL setup.
+   ```bash
+   cp .env.example .env
+   ```
+   Edit `.env` as needed for your local PostgreSQL setup.
 
 3. Run the database (PostgreSQL) locally. You can use Docker, for example:
+   ```bash
+   docker run --name taxi24-postgres -e POSTGRES_USER=taxi24_user -e POSTGRES_PASSWORD=taxi24_pass -e POSTGRES_DB=taxi24_db -p 5432:5432 -d postgres
+   ```
 
-```bash
-docker run --name taxi24-postgres -e POSTGRES_USER=taxi24_user -e POSTGRES_PASSWORD=taxi24_pass -e POSTGRES_DB=taxi24_db -p 5432:5432 -d postgres
-```
+4. Start the app:
+   ```bash
+   npm run start:dev
+   ```
 
 ## Compile and run the project
 
@@ -127,19 +146,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
 ## Resources
 
