@@ -17,7 +17,19 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
         autoLoadEntities: true,
-        synchronize: true,
+        // IMPORTANT: Disable in production/serverless - use migrations instead
+        synchronize: configService.get<string>('NODE_ENV') !== 'production',
+        // Serverless optimizations
+        extra: {
+          // Connection pool settings for serverless
+          max: 5, // Reduced pool size for serverless
+          connectionTimeoutMillis: 10000, // 10s connection timeout
+          idleTimeoutMillis: 10000, // Close idle connections quickly
+        },
+        ssl:
+          configService.get<string>('NODE_ENV') === 'production'
+            ? { rejectUnauthorized: false }
+            : false,
       }),
     }),
   ],
