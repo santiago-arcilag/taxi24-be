@@ -1,21 +1,20 @@
-const serverlessExpress = require('@vendia/serverless-express');
 const { NestFactory } = require('@nestjs/core');
 const { ExpressAdapter } = require('@nestjs/platform-express');
 const express = require('express');
 const { DocumentBuilder, SwaggerModule } = require('@nestjs/swagger');
 
-let cachedServer;
+let app;
 
 async function bootstrap() {
-  if (cachedServer) {
-    return cachedServer;
+  if (app) {
+    return app;
   }
 
   const expressApp = express();
   const adapter = new ExpressAdapter(expressApp);
 
   const { AppModule } = require('../dist/app.module');
-  const app = await NestFactory.create(AppModule, adapter);
+  const nestApp = await NestFactory.create(AppModule, adapter);
 
   // Setup Swagger
   const config = new DocumentBuilder()
@@ -23,17 +22,17 @@ async function bootstrap() {
     .setDescription('API documentation for Taxi24 backend test')
     .setVersion('1.0')
     .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  const document = SwaggerModule.createDocument(nestApp, config);
+  SwaggerModule.setup('docs', nestApp, document);
 
-  app.enableCors();
-  await app.init();
+  nestApp.enableCors();
+  await nestApp.init();
 
-  cachedServer = serverlessExpress({ app: expressApp });
-  return cachedServer;
+  app = expressApp;
+  return app;
 }
 
 module.exports = async (req, res) => {
-  const server = await bootstrap();
-  return server(req, res);
+  const expressApp = await bootstrap();
+  expressApp(req, res);
 };
